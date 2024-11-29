@@ -13,6 +13,7 @@ import FavoritesItemCard from "@/components/FavoritesItemCard";
 import HeaderBar from "@/components/HeaderBar";
 import { COLORS, SPACING } from "@/theme/theme";
 import { useStore } from "@/hooks/store";
+import { useRouter } from "expo-router";
 
 const FavoritesScreen = ({ navigation }: any) => {
   const FavoritesList = useStore((state: any) => state.FavoritesList);
@@ -24,6 +25,7 @@ const FavoritesScreen = ({ navigation }: any) => {
   const ToggleFavourite = (favourite: boolean, type: string, id: string) => {
     favourite ? deleteFromFavoriteList(type, id) : addToFavoriteList(type, id);
   };
+  const router=useRouter()
   return (
     <View style={styles.ScreenContainer}>
       <StatusBar backgroundColor={COLORS.primaryBlackHex} />
@@ -45,11 +47,19 @@ const FavoritesScreen = ({ navigation }: any) => {
                 {FavoritesList.map((data: any) => (
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.push("Details", {
-                        index: data.index,
-                        id: data.id,
-                        type: data.type,
-                      });
+                        router.push({
+                          pathname: "/details/[id]",
+                          params: {
+                            id: data.id,
+                            index: data.index,
+                            type: data.type,
+                          },
+                        });
+                      // navigation.push("Details", {
+                      //   index: data.index,
+                      //   id: data.id,
+                      //   type: data.type,
+                      // });
                     }}
                     key={data.id}
                   >

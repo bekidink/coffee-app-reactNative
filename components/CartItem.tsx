@@ -41,6 +41,7 @@ const CartItem: React.FC<CartItemProps> = ({
   decrementCartItemQuantityHandler,
 }) => {
   return (
+    
     <View>
       {prices.length != 1 ? (
         <LinearGradient
@@ -50,7 +51,11 @@ const CartItem: React.FC<CartItemProps> = ({
           style={styles.CartItemLinearGradient}
         >
           <View style={styles.CartItemRow}>
-            <Image source={imagelink_square} style={styles.CartItemImage} />
+            <Image
+            
+              source={ imagelink_square }
+              style={styles.CartItemImage}
+            />
             <View style={styles.CartItemInfo}>
               <View>
                 <Text style={styles.CartItemTitle}>{name}</Text>

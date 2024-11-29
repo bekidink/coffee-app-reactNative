@@ -54,9 +54,12 @@ const CoffeeCard: React.FC<CoffeeCardProps> = ({
       colors={[COLORS.primaryGreyHex, COLORS.primaryBlackHex]}
     >
       <ImageBackground
-        source={imagelink_square}
+        source={{uri:imagelink_square}}
         style={styles.CardImageBG}
         resizeMode="cover"
+        onError={(e) =>
+          console.error("Image loading error:", e.nativeEvent.error)
+        }
       >
         <View style={styles.CardRatingContainer}>
           <CustomIcon

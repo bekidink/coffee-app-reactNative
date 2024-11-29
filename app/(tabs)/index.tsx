@@ -10,6 +10,7 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 
 import { HelloWave } from "@/components/HelloWave";
@@ -31,14 +32,25 @@ import {
   BORDERRADIUS,
 } from "@/theme/theme";
 import { useNavigation, useRouter } from "expo-router";
+import useFetchCoffeeList from "@/hooks/useFetch";
+import { useSelector } from "react-redux";
+import { Coffee, setBeanList, setCoffeeList } from "@/hooks/slices/coffeeSlice";
 
 export default function HomeScreen() {
-  const CoffeeList = useStore((state: any) => state.CoffeeList);
+  const { loading, error } = useFetchCoffeeList('Coffee');
+  const { loading:beanLoding, error:beanError } = useFetchCoffeeList("Bean");
+  const coffeeList = useSelector(
+    (state: { coffee: { CoffeeList: Coffee[] } }) => state.coffee.CoffeeList
+  );
+  const beanList = useSelector(
+    (state: { coffee: { BeanList: Coffee[] } }) => state.coffee.BeanList
+  );
+  // const CoffeeList = useStore((state: any) => state.CoffeeList);
   const BeanList = useStore((state: any) => state.BeanList);
   const addToCart = useStore((state: any) => state.addToCart);
   const calculateCartPrice = useStore((state: any) => state.calculateCartPrice);
   const [categories, setCategories] = useState(
-    getCategoriesFromData(CoffeeList)
+    getCategoriesFromData(coffeeList)
   );
   const [searchText, setSearchText] = useState("");
   const [categoryIndex, setCategoryIndex] = useState({
@@ -46,7 +58,7 @@ export default function HomeScreen() {
     category: categories[0],
   });
   const [sortedCoffee, setSortedCoffee] = useState(
-    getCoffeeList(categoryIndex.category, CoffeeList)
+    getCoffeeList(categoryIndex.category, coffeeList)
   );
   const ListRef: any = useRef<FlatList>();
   const tabBarHeight = useBottomTabBarHeight();
@@ -59,7 +71,7 @@ export default function HomeScreen() {
       });
       setCategoryIndex({ index: 0, category: categories[0] });
       setSortedCoffee([
-        ...CoffeeList.filter((item: any) =>
+        ...coffeeList.filter((item: any) =>
           item.name.toLowerCase().includes(search.toLowerCase())
         ),
       ]);
@@ -71,7 +83,7 @@ export default function HomeScreen() {
       offset: 0,
     });
     setCategoryIndex({ index: 0, category: categories[0] });
-    setSortedCoffee([...CoffeeList]);
+    setSortedCoffee([...coffeeList]);
     setSearchText("");
   };
 
@@ -104,6 +116,21 @@ export default function HomeScreen() {
   };
   const navigation = useNavigation();
   const router = useRouter();
+  if (loading) {
+    return (
+      <View>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Loading coffee list...</Text>
+      </View>
+    );
+  }
+   if (error) {
+     return (
+       <View>
+         <Text>Error: {error}</Text>
+       </View>
+     );
+   }
   return (
     <View style={styles.ScreenContainer}>
       <StatusBar backgroundColor={COLORS.primaryBlackHex} />
@@ -189,7 +216,7 @@ export default function HomeScreen() {
                     category: categories[index],
                   });
                   setSortedCoffee([
-                    ...getCoffeeList(categories[index], CoffeeList),
+                    ...getCoffeeList(categories[index], coffeeList),
                   ]);
                 }}
               >
@@ -265,7 +292,7 @@ export default function HomeScreen() {
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
-          data={BeanList}
+          data={beanList}
           contentContainerStyle={[
             styles.FlatListContainer,
             { marginBottom: tabBarHeight },
@@ -295,7 +322,7 @@ export default function HomeScreen() {
                   index={item.index}
                   type={item.type}
                   roasted={item.roasted}
-                  imagelink_square={item.imagelink_square}
+                  imagelink_square={item.imagelink_square??''}
                   name={item.name}
                   special_ingredient={item.special_ingredient}
                   average_rating={item.average_rating}

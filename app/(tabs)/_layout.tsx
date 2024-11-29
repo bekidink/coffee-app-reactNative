@@ -33,8 +33,14 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+          tabBarIcon: ({ color, focused }) => (
+            <IconSymbol
+              size={28}
+              name="house.fill"
+              color={
+                focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
+              }
+            />
           ),
         }}
       />
@@ -43,9 +49,9 @@ export default function TabLayout() {
         options={{
           title: "Cart",
           tabBarIcon: ({ focused, color, size }) => (
-            <CustomIcon
-              name="cart"
-              size={25}
+            <IconSymbol
+              size={28}
+              name="cart.circle"
               color={
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
@@ -58,9 +64,9 @@ export default function TabLayout() {
         options={{
           title: "Favorite",
           tabBarIcon: ({ focused, color, size }) => (
-            <CustomIcon
-              name="cart"
-              size={25}
+            <IconSymbol
+              size={28}
+              name="heart.fill"
               color={
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
@@ -72,10 +78,10 @@ export default function TabLayout() {
         name="history"
         options={{
           title: "History",
-          tabBarIcon: ({ focused, color, size }) => (
-            <CustomIcon
-              name="cart"
-              size={25}
+          tabBarIcon: ({ focused, color }) => (
+            <IconSymbol
+              size={28}
+              name="0.square"
               color={
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }

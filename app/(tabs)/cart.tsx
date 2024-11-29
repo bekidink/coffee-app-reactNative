@@ -31,7 +31,7 @@ const CartScreen = ({  route }: any) => {
  const router=useRouter()
   const buttonPressHandler = () => {
     router.push({
-      pathname: "/payment/index",
+      pathname: "/payment",
       params: {
        
         amount: CartPrice,
